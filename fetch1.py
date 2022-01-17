@@ -1,7 +1,7 @@
 from indodax import indodax
-import time
 from datetime import datetime
 import pickle
+import sys
   
 # Open the file in binary mode
 with open('cred.pkl', 'rb') as file:      
@@ -10,7 +10,21 @@ with open('cred.pkl', 'rb') as file:
   
 dax = indodax(mycred['key'],mycred['secret'])
 
-while True:
-    data = indodax.get_price('btc')
-    print(datetime.fromtimestamp(data['ticker']['server_time']), "\t", data['ticker']['last'])
-    time.sleep(900)
+if len(sys.argv)<2:
+    print("Market not defined")
+    exit()
+else:
+    market = sys.argv[1]
+
+data = indodax.get_price(market)
+
+# 'server_time', 'high', 'low', 'vol_btc', 'vol_idr', 'last', 'buy', 'sell'
+print(datetime.fromtimestamp(data['ticker']['server_time']), "\t", 
+    data['ticker']['last'],"\t",
+    data['ticker']['high'],"\t",
+    data['ticker']['low'],"\t",
+    data['ticker']['vol_btc'],"\t",
+    data['ticker']['vol_idr'],"\t",
+    data['ticker']['last'],"\t",
+    data['ticker']['buy'],"\t",
+    data['ticker']['sell'])
